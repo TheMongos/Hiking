@@ -11,6 +11,7 @@ var morgan	 		= require('morgan');
 var cookieParser 	= require('cookie-parser');
 var bodyParser 	 	= require('body-parser');
 var session	 		= require('express-session');
+var MongoStore		= require('connect-mongo')(session);
 
 var configDB 	= require('./config/database.js');
 
@@ -29,7 +30,10 @@ app.set('view engine', 'ejs');
 var year 	= 365 * 24 * 3600000; //3600000 is an hour * 24 hours a day * 365 days a year
 app.use(session({ 
 	secret: 'eladanddavidarethebestever',
-	cookie: { maxAge: year }  
+	cookie: { maxAge: year },
+	store: new MongoStore({
+      mongoose_connection: mongoose.connection
+    })  
 }));
 app.use(passport.initialize());
 app.use(passport.session());
