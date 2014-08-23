@@ -27,13 +27,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
 
+sessionStore = new MongoStore({ mongoose_connection: mongoose.connection });
+
 var year 	= 365 * 24 * 3600000; //3600000 is an hour * 24 hours a day * 365 days a year
 app.use(session({ 
 	secret: 'eladanddavidarethebestever',
 	cookie: { maxAge: year },
-	store: new MongoStore({
-      mongoose_connection: mongoose.connection
-    })  
+	store: sessionStore 
 }));
 app.use(passport.initialize());
 app.use(passport.session());
