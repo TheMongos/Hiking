@@ -16,16 +16,7 @@ var MongoStore		= require('connect-mongo')(session);
 var configDB 	= require('./config/database.js');
 
 // configuration
-mongoose.connect(configDB.url, function (err) {
-	var year 	= 365 * 24 * 3600000; //3600000 is an hour * 24 hours a day * 365 days a year
-	app.use(session({ 
-		secret: 'eladanddavidarethebestever',
-		cookie: { maxAge: year },
-		store: new MongoStore({
-	      mongoose_connection: mongoose.connection
-	    })  
-	}));
-}); 
+mongoose.connect(configDB.url); 
 
 require('./config/passport')(passport);
 
@@ -36,6 +27,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
 
+var year 	= 365 * 24 * 3600000; //3600000 is an hour * 24 hours a day * 365 days a year
+app.use(session({ 
+	secret: 'eladanddavidarethebestever',
+	cookie: { maxAge: year },
+	store: new MongoStore({
+      mongoose_connection: mongoose.connection
+    })  
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
