@@ -21,4 +21,6 @@ var hikeSchema = mongoose.Schema({
 
 });
 
+
+
 module.exports = mongoose.model('Hike', hikeSchema);

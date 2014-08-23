@@ -15,12 +15,7 @@
 	</header>
 	<div class="content" data-role="content" id="maincontent">
 		<% if (hikesList != null) { %>
-			<ul data-role='listview' id='listDiv'>
-					
-						<% for (var i=0;i<hikesList.length;i++) { %>
-							<li><a href='hikes/<%= hikesList[i]._id%>'><%= hikesList[i].name %></a></li>
-						<% } %>
-			</ul>
+			<%= hikesList %>
 		<% } %>
 		
 	</div>

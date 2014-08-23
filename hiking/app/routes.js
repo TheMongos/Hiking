@@ -1,4 +1,4 @@
-var Hike = require('../app/models/hike');
+var hikes = require('../app/dbservices/hikes');
 module.exports = function(app, passport) {
 	
 	app.get('/', isLoggedIn, function(req, res) {
@@ -36,23 +36,9 @@ module.exports = function(app, passport) {
 		res.redirect('/');
 	});
 
-	app.get('/trail/:id', function(req, res) {
-		
-	});
+	app.get('/hikes/:id', hikes.findById);
 
-	app.get('/hikes', function(req, res) {
-		getHikes(function(list) {
-			if( list) {
-				res.render('hikes.ejs', {
-					hikesList : list
-				});
-			}
-		});
-		// console.log(getHikes());
-		// res.render('hikes.ejs', {
-		// 	hikesList : getHikes()
-		// });
-	});
+	app.get('/hikes', hikes.findAll);
 
 	app.get('/trails/:area', function(req, res) {
 
@@ -66,14 +52,3 @@ function isLoggedIn(req, res, next) {
 	res.render('index.ejs');
 }
 
-function getHikes(callback) { 
-    	Hike.find({}, function(error, cursor){
-            if (error) {
-                callback(false);
-            } else {
-            	// console.log(cursor);
-                callback(cursor);
-            }
-        });
-//    });
-}
