@@ -1,3 +1,4 @@
+var Hike = require('../app/models/hike');
 module.exports = function(app, passport) {
 	
 	app.get('/', function(req, res) {
@@ -39,8 +40,18 @@ module.exports = function(app, passport) {
 		
 	});
 
-	app.get('/trails', function(req, res) {
-
+	app.get('/hikes', function(req, res) {
+		getHikes(function(list) {
+			if( list) {
+				res.render('hikes.ejs', {
+					hikesList : list
+				});
+			}
+		});
+		// console.log(getHikes());
+		// res.render('hikes.ejs', {
+		// 	hikesList : getHikes()
+		// });
 	});
 
 	app.get('/trails/:area', function(req, res) {
@@ -53,4 +64,16 @@ function isLoggedIn(req, res, next) {
 		return next();
 
 	res.redirect('/');
+}
+
+function getHikes(callback) { 
+    	Hike.find({}, function(error, cursor){
+            if (error) {
+                callback(false);
+            } else {
+            	// console.log(cursor);
+                callback(cursor);
+            }
+        });
+//    });
 }

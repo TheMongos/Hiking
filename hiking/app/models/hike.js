@@ -16,7 +16,7 @@ var hikeSchema = mongoose.Schema({
   completed_count: Number,
   description: String,
   ranking_pages: [
-    hike_rank_page_id: mongoose.Schema.Types.ObjectId
+    mongoose.Schema.Types.ObjectId
   ]
 
 });
