@@ -33,6 +33,7 @@ module.exports = function(passport) {
 						newUser.save(function(err) {
 							if (err)
 								throw err;
+							req.session.username = username;
 							return done(null, newUser); 
 						});
 					}
