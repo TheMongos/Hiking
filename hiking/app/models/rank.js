@@ -1,6 +1,6 @@
 var mongoose 	= require('mongoose');
 
-var hikeSchema = mongoose.Schema({
+var rankSchema = mongoose.Schema({
 
 	username: 		String, 
 	hike_id: 		mongoose.Schema.Types.ObjectId,
@@ -13,4 +13,4 @@ var hikeSchema = mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('Rank', hikeSchema);
+module.exports = mongoose.model('Rank', rankSchema);

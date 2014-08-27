@@ -18,6 +18,8 @@ var userSchema = mongoose.Schema({
 		}
 	} ],
 	rank_history: [ {
+		rank_id: 		mongoose.Schema.Types.ObjectId,
+		hike_id: 		mongoose.Schema.Types.ObjectId, 
 		hike_name: 		String, 
 		overall_rating: Number
 	} ]
