@@ -1,4 +1,5 @@
-var hikes = require('../app/dbservices/hikes');
+var hikes = require('../app/dbservices/hikes'); 
+var ranks = require('../app/dbservices/ranks'); 
 module.exports = function(app, passport) {
 	
 	app.get('/', isLoggedIn, function(req, res) {
@@ -38,6 +39,8 @@ module.exports = function(app, passport) {
 
 	app.get('/hikes/:id', hikes.findById);
 
+	app.get('/hikes/:id/addRank', isLoggedIn, ranks.addRank);
+
 	app.get('/hikes', hikes.findAll);
 
 	app.get('/trails/:area', function(req, res) {
@@ -49,6 +52,6 @@ function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated())
 		return next();
 
-	res.render('index.ejs');
+	res.render('login.ejs', { message: req.flash('loginMessage')});
 }
 

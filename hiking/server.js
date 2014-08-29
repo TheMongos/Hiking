@@ -33,6 +33,7 @@ app.use(session({
     cookie: { maxAge: year },
     store: new MongoStore({
         mongoose_connection: mongoose.connection
+        
     })
 }));
 
