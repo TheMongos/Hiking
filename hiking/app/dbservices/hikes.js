@@ -25,6 +25,22 @@ exports.findById = function(req, res) {
     });
 };
 
+exports.getHikesNear = function(req, res) {
+    var lon = req.params.lon;
+    var lat = req.params.lat;
+    
+    findNear(lon, lat, function(list){
+        if (list) {
+            res.render('hikes.ejs', {
+                hikesList : list
+            });
+        } else {
+            res.redirect('/hikes');
+        }
+    });
+
+};
+
 function getHike(id, callback) { 
     Hike.findById(id, function(error, hike){
         if (error) {
@@ -41,6 +57,19 @@ function getHikes(callback) {
             callback(false);
         } else {
             callback(hikes);
+        }
+    });
+}
+
+function findNear(lon, lat, callback) {
+    var point = { type : "Point", coordinates : [lon, lat] };
+    var maxDistance = 50000 //in meters
+    Hike.geoNear(point, { maxDistance : maxDistance , spherical : true }, function(err, results, stats) {
+        if (err) {
+            callback(false);
+        } else {
+            console.log(results);
+            callback(results);
         }
     });
 }

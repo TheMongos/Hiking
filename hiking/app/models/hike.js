@@ -7,10 +7,7 @@ var hikeSchema = mongoose.Schema({
   length: Number,
   time: String,
   Difficulty: { type : Number, min : 0 , max :5 },
-  start_coord: {
-    lon: Number,
-    lat: Number
-  },
+  loc: { type: [Number], index: '2dsphere'},
   rank_count: Number,
   avg_overall_rating: { type : Number, min : 0 , max :5 },
   completed_count: Number,

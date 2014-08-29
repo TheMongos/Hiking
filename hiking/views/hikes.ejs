@@ -24,7 +24,17 @@
 		<% } %>
 		
 	</div>
+	<form method='GET' onsubmit='addAcitonLocation(this)' >
+		<button type='sumbit' value='Find Near Me'></button>
+	</form>
 	<footer data-role="footer" data-position="fixed"><h1><i>Student Mobile</i></h1></footer>
 </section>
+<script>
+	function addAcitonLocation(form) {
+		var lon = 32.069041;
+		var lat = 34.8103683;
+		form.action = "/hikes/findNearMe/" + lon + "/" + lat;
+	}
+</script>
 </body>
 </html>
