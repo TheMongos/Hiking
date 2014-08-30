@@ -42,7 +42,7 @@ exports.saveRank = function(req, res) {
 				console.log("hike id" + hike._id);
 
 
-				User.findOneAndUpdate({ username: username }, { $push: { rank_history: { rank_id: new ObjectID(rank._id), hike_id: new ObjectID(hike._id), hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
+				User.update({ username: username }, { $push: { rank_history: { rank_id: new ObjectID(rank._id), hike_id: new ObjectID(hike._id), hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
 			}
 	    });
 
