@@ -21,28 +21,32 @@ exports.addRank = function(req, res) {
 exports.saveRank = function(req, res) {
 	hikeId = req.params.id;
 	username = req.session.username;
-	var hike = Hike.findById(hikeId);
-	saveNewRank(req, res, hike.name, hikeId , username,  function(rank) {
-		if(rank) {
-			console.log(rank);
-			getRank(hikeId, username, function(oldRankId, message) {
-				if(oldRankId) { 
-					RankingPage.update({},{ $pull: { comments: { rank_id: oldRankId } } }, { multi: false });
-					User.update({ username: username }, { $pull: { rank_history: { rank_id: oldRankId } } }, { multi: false });
-					var oldRank = Rank.findById(oldRankId);
-					var hikeRankCount = hike.rank_count;
-					var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
-					hikeRankCount = hikeRankCount -1 ;
-					hikeAvgRating -= oldRank.overall_rating;
-					Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
+	Hike.findById(hikeId, function(err, hike){
+		saveNewRank(req, res, hike.name, hikeId , username,  function(rank) {
+			if(rank) {
+				console.log(rank);
+				getRank(hikeId, username, function(oldRankId, message) {
+					if(oldRankId) { 
+						RankingPage.update({},{ $pull: { comments: { rank_id: oldRankId } } }, { multi: false });
+						User.update({ username: username }, { $pull: { rank_history: { rank_id: oldRankId } } }, { multi: false });
+						var oldRank = Rank.findById(oldRankId);
+						var hikeRankCount = hike.rank_count;
+						var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
+						hikeRankCount = hikeRankCount -1 ;
+						hikeAvgRating -= oldRank.overall_rating;
+						Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
 
-				}
-			});
+					}
+				});
 
 
-			User.update({ username: username }, { $push: { rank_history: { rank_id: rank._id , hike_id: hikeId, hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
-		}
-    });
+				User.update({ username: username }, { $push: { rank_history: { rank_id: rank._id , hike_id: hikeId, hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
+			}
+	    });
+
+
+	});
+
 
     res.redirect('/hikes/' + hikeId);
 };
