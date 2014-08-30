@@ -9,8 +9,8 @@ var RankingPage = require('../models/ranking_page');
 var ObjectID = require('mongoose').Schema.Types.ObjectId;
 
 exports.addRank = function(req, res) {
-	hikeId = req.params.id;
-	username = req.session.username;
+	var hikeId = req.params.id;
+	var username = req.session.username;
     getRank(hikeId, username, function(oldRankId, message) {
         res.render('addRank.ejs', {
             message : message
@@ -19,13 +19,14 @@ exports.addRank = function(req, res) {
 };
 
 exports.saveRank = function(req, res) {
-	hikeId = req.params.id;
-	username = req.session.username;
+	var hikeId = req.params.id;
+	var username = req.session.username;
 	Hike.findById(hikeId, function(err, hike){
 		saveNewRank(req, res, hike.name, hikeId , username,  function(rank) {
 			if(rank) {
 				console.log(rank);
 				getRank(hikeId, username, function(oldRankId, message) {
+					console.log(oldRankId);
 					if(oldRankId) { 
 						RankingPage.update({},{ $pull: { comments: { rank_id: oldRankId } } }, { multi: false });
 						User.update({ username: username }, { $pull: { rank_history: { rank_id: oldRankId } } }, { multi: false });
