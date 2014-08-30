@@ -40,7 +40,7 @@ exports.saveRank = function(req, res) {
 				});
 
 
-				User.update({ username: username }, { $push: { rank_history: { rank_id: rank._id , hike_id: hikeId, hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
+				User.update({ username: username }, { $push: { rank_history: { rank_id: rank._id , hike_id: hike._id, hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
 			}
 	    });
 
@@ -86,6 +86,7 @@ function getRank(hikeId, username, callback) {
     	for(var i in rankArr) {
     		if(rankArr[i].hike_id == hikeObjectId) {
     			callback(rankArr[i].rank_id, "You have already rank this hike, adding a new rank will delete your last rank");
+    			console.log("here!!");
     			foundMatch = true;
     		}
 
