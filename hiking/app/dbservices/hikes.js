@@ -31,8 +31,12 @@ exports.getHikesNear = function(req, res) {
 
     findNear(lon, lat, function(list){
         if (list) {
+            var results = [];
+            for (var hike in list) {
+                results.push(hike.obj);
+            }
             res.render('hikes.ejs', {
-                hikesList : list
+                hikesList : results
             });
         } else {
             res.redirect('/hikes');
@@ -69,8 +73,6 @@ function findNear(lon, lat, callback) {
             if (err) {
                 console.log(err);
             } else {
-                console.log(docs.results[1].obj);
-                console.log(docs);
                 callback(docs);
             }
     });
