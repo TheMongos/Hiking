@@ -24,9 +24,7 @@ exports.saveRank = function(req, res) {
 	Hike.findById(hikeId, function(err, hike){
 		saveNewRank(req, res, hike.name, hikeId , username,  function(rank) {
 			if(rank) {
-				console.log("rank- " + rank);
 				getRank(hikeId, username, function(oldRankId, message) {
-					console.log(oldRankId);
 					if(oldRankId) { 
 						RankingPage.update({},{ $pull: { comments: { rank_id: oldRankId } } }, { multi: false });
 						User.update({ username: username }, { $pull: { rank_history: { rank_id: oldRankId } } }, { multi: false });
@@ -35,16 +33,16 @@ exports.saveRank = function(req, res) {
 						var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
 						hikeRankCount = hikeRankCount -1 ;
 						hikeAvgRating -= oldRank.overall_rating;
-						console.log("1");
 						Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
-						console.log("2");
 
 					}
 				});
 
+				console.log("rank id" + rank._id);
+				console.log("hike id" + hike._id);
 
-				User.update({ username: username }, { $push: { rank_history: { rank_id: rank._id , hike_id: hike._id, hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
-				console.log("3");
+
+				User.findOneAndUpdate({ username: username }, { $push: { rank_history: { rank_id: new ObjectID(rank._id), hike_id: new ObjectID(hike._id), hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
 			}
 	    });
 
