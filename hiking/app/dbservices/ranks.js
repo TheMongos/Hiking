@@ -22,7 +22,7 @@ exports.saveRank = function(req, res) {
 	hikeId = req.params.id;
 	username = req.session.username;
 	var hike = Hike.findById(hikeId);
-	saveNewRank(req, res, hike.name, hikeId , username,  function(err, rank) {
+	saveNewRank(req, res, hike.name, hikeId , username,  function(rank) {
 		if(rank) {
 			console.log(rank);
 			getRank(hikeId, username, function(oldRankId, message) {
@@ -44,7 +44,7 @@ exports.saveRank = function(req, res) {
 		}
     });
 
-    res.redirect()
+    res.redirect('/hikes/' + hikeId);
 };
 
 
