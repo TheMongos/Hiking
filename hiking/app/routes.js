@@ -45,7 +45,7 @@ module.exports = function(app, passport) {
 
 	app.get('/hikes', hikes.findAll);
 
-
+	app.get('/hikes/findNearMe/:lon/:lat', isLoggedIn, hikes.getHikesNear); 
 };
 
 function isLoggedIn(req, res, next) {
