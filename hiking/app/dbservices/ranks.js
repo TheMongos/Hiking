@@ -24,7 +24,7 @@ exports.saveRank = function(req, res) {
 	Hike.findById(hikeId, function(err, hike){
 		saveNewRank(req, res, hike.name, hikeId , username,  function(rank) {
 			if(rank) {
-				console.log(rank);
+				console.log("rank- " + rank);
 				getRank(hikeId, username, function(oldRankId, message) {
 					console.log(oldRankId);
 					if(oldRankId) { 
