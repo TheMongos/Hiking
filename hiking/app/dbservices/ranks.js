@@ -34,13 +34,16 @@ exports.saveRank = function(req, res) {
 						var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
 						hikeRankCount = hikeRankCount -1 ;
 						hikeAvgRating -= oldRank.overall_rating;
+						console.log("1");
 						Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
+						console.log("2");
 
 					}
 				});
 
 
 				User.update({ username: username }, { $push: { rank_history: { rank_id: rank._id , hike_id: hike._id, hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
+				console.log("3");
 			}
 	    });
 
