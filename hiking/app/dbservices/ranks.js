@@ -22,8 +22,9 @@ exports.saveRank = function(req, res) {
 	hikeId = req.params.id;
 	username = req.session.username;
 	var hike = Hike.findById(hikeId);
-	saveNewRank(req, res, hike.name, hikeId , username,  function(rank) {
+	saveNewRank(req, res, hike.name, hikeId , username,  function(err, rank) {
 		if(rank) {
+			console.log(rank);
 			getRank(hikeId, username, function(oldRankId, message) {
 				if(oldRankId) { 
 					RankingPage.update({},{ $pull: { comments: { rank_id: oldRankId } } }, { multi: false });
@@ -31,7 +32,7 @@ exports.saveRank = function(req, res) {
 					var oldRank = Rank.findById(oldRankId);
 					var hikeRankCount = hike.rank_count;
 					var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
-					hikeRankCount-- ;
+					hikeRankCount = hikeRankCount -1 ;
 					hikeAvgRating -= oldRank.overall_rating;
 					Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
 
@@ -42,6 +43,8 @@ exports.saveRank = function(req, res) {
 			User.update({ username: username }, { $push: { rank_history: { rank_id: rank._id , hike_id: hikeId, hike_name : hike.name , overall_rating: rank.overall_rating} } }, { multi: false });
 		}
     });
+
+    res.redirect()
 };
 
 
@@ -56,8 +59,10 @@ function saveNewRank(req, res, hikeName, hikeId, username, callback) {
 	newRank.description		= req.body.description;
 	
 	newRank.save(function(err) {
-	if (err)
+	if (err){
+		console.log("error!!!");
 		throw err;
+	}
 		callback(newRank);
 	});
 }
