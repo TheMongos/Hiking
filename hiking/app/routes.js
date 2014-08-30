@@ -41,11 +41,11 @@ module.exports = function(app, passport) {
 
 	app.get('/hikes/:id/addRank', isLoggedIn, ranks.addRank);
 
+	app.post('/hikes/:id/addRank', isLoggedIn, ranks.saveRank);
+
 	app.get('/hikes', hikes.findAll);
 
-	app.get('/trails/:area', function(req, res) {
 
-	});
 };
 
 function isLoggedIn(req, res, next) {

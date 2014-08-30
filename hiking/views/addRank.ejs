@@ -21,21 +21,36 @@
 		<% } %>
 
 		<!-- LOGIN FORM -->
-		<form action="/" method="post">
-			<div class="form-group">
-				<label>Username</label>
-				<input type="text" class="form-control" name="username">
-			</div>
-			<div class="form-group">
-				<label>Password</label>
-				<input type="password" class="form-control" name="password">
-			</div>
+		<form onsubmit="setAction(this)" method="post">
 
-			<button type="submit" class="btn btn-warning btn-lg">Login</button>
+			<div class="form-group">
+				<label>overall rating</label>
+				<input type="number" class="form-control" name="overall_rating" min="0" max="5" >
+			</div>
+			<div class="form-group">
+				<label>difficulty</label>
+				<input type="number" class="form-control" name="difficulty" min="0" max="5" >
+			</div>
+			<div class="form-group">
+				<label>cleanliness</label>
+				<input type="number" class="form-control" name="cleanliness" min="0" max="5">
+			</div>
+			<div class="form-group">
+				<label>description</label>
+				<textarea  class="form-control" name="description"></textarea>
+			</div>
+			<input type="hidden" class="form-control" value="" name="hike_id">
+			<button type="submit" class="btn btn-warning btn-lg">Submit</button>
 		</form>
 
 	</div>
 	<footer data-role="footer" data-position="fixed"><h1><i>Student Mobile</i></h1></footer>
 </section>
+<script>
+function setAction ( form) {
+	var pathArray = window.location.pathname.split( '/' );
+	form.action = "/ranks/" + pathArray[2] + "/addRank"
+}
+</script>
 </body>
 </html>
