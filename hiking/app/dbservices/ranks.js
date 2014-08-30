@@ -6,7 +6,7 @@ var User = require('../models/user');
 var Hike = require('../models/hike');
 var RankingPage = require('../models/ranking_page');
 
-var ObjectID = require('mongoose').Schema.Types.ObjectId;
+var ObjectID = require('mongoose').Types.ObjectId;
 
 exports.addRank = function(req, res) {
 	var hikeId = req.params.id;
