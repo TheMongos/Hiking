@@ -72,7 +72,7 @@ function getRank(hikeId, username, callback) {
     	var foundMatch = false;
     	if(err) {
     		console.log(err);
-    		callback("");
+    		callback(null, "");
     	}
 
     	var rankArr = user.rank_history;
