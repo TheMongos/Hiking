@@ -67,8 +67,8 @@ function getHikes(callback) {
 
 function findNear(lon, lat, callback) {
     var point = { type : "Point", coordinates : [parseFloat(lon), parseFloat(lat)] };
-    var maxDistance = 50000 //in meters
-    Hike.db.db.command( { geoNear: "hikes", near: point, spherical: true, maxDistance: 50000 },
+    var maxDistance = 10000 //in meters
+    Hike.db.db.command( { geoNear: "hikes", near: point, spherical: true, maxDistance: maxDistance },
         function(err, docs) {
             if (err) {
                 console.log(err);
