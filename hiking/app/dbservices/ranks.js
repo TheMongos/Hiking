@@ -72,10 +72,11 @@ function saveNewRank(req, res, hikeName, hikeId, username, callback) {
 }
 
 function getRank(hikeId, username, callback) { 
+	console.log("username:" + username + " || " + "hikeId:" + hikeId);
     User.findOne( { username: username }, function(err, user) {
     	var foundMatch = false;
     	if(err) {
-    		console.log(err);
+    		console.log("error2:" + err);
     		callback(null, "");
     	}
 
