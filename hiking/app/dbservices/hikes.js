@@ -32,8 +32,8 @@ exports.getHikesNear = function(req, res) {
     findNear(lon, lat, function(list){
         if (list) {
             var results = [];
-            for (var hike in list) {
-                results.push(hike.obj);
+            for (var hike in list.results) {
+                results.push(list.results[hike].obj);
             }
             res.render('hikes.ejs', {
                 hikesList : results
@@ -66,7 +66,7 @@ function getHikes(callback) {
 }
 
 function findNear(lon, lat, callback) {
-    var point = { type : "Point", coordinates : [lon, lat] };
+    var point = { type : "Point", coordinates : [parseFloat(lon), parseFloat(lat)] };
     var maxDistance = 50000 //in meters
     Hike.db.db.command( { geoNear: "hikes", near: point, spherical: true, maxDistance: 50000 },
         function(err, docs) {
