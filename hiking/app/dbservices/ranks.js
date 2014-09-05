@@ -67,7 +67,7 @@ exports.saveRank = function(req, res) {
 
 function getRankingPageId(hike, callback) {
 	var rankingPageId;
-	if(hike.ranking_pages.lenth > 0) {
+	if(hike.ranking_pages.length > 0) {
 		rankingPageId = hike.ranking_pages[hike.ranking_pages.length - 1];
 		RankingPage.findById(rankingPageId, function(err, rankingPage){
 			if (err) {
