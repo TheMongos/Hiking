@@ -30,12 +30,10 @@ exports.saveRank = function(req, res) {
 						User.update({ username: username }, { $pull: { rank_history: { rank_id: new ObjectID(oldRankId) } } }, { multi: false });
 						var oldRank = Rank.findById(oldRankId);
 						var hikeRankCount = hike.rank_count;
-						console.log("type: " +hikeRankCount+" "+ typeof(hikeRankCount));
 						var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
-						console.log("type: " +hikeRankCount+" "+ typeof(hikeAvgRating));
 						hikeRankCount = hikeRankCount -1 ;
 						hikeAvgRating -= oldRank.overall_rating;
-						console.log("type: " +hikeRankCount+" "+ typeof(hikeAvgRating));
+						hikeAvgRating = hikeAvgRating / hikeRankCount;
 						Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
 
 					}
@@ -53,7 +51,26 @@ exports.saveRank = function(req, res) {
 						if(err)
 							console.log(err);
 					});
+
+
+					Hike.findById(hike._id, function(err, newHike) {
+						var hikeRankCount = newHike.rank_count;
+						var hikeAvgRating = newHike.avg_overall_rating * hikeRankCount;
+						hikeAvgRating += rank.overall_rating;
+						hikeRankCount += 1;
+						hikeAvgRating = hikeAvgRating / hikeRankCount; 						
+
+						Hike.findByIdAndUpdate(hike._id,{ $set: { avg_overall_rating:  hikeAvgRating , rank_count: hikeRankCount}}, function(err, hike){
+							if(err) {
+								console.log(err);
+								throw err;
+							}
+						}):
+					});
+					
 				});
+
+
 
 				User.findOneAndUpdate({ username: username }, { $push: { "rank_history": { rank_id: new ObjectID(rank._id), hike_id: new ObjectID(hike._id), 
 					hike_name : hike.name , overall_rating: rank.overall_rating} } }, function(err, data){
