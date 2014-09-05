@@ -38,26 +38,73 @@ exports.saveRank = function(req, res) {
 					}
 				});
 
-				console.log("rank id" + rank._id);
-				console.log("hike id" + hike._id);
 
+				getRankingPageId(hike, function(err, rankingPageId) {
+					if(err){
+						console.log(err);
+						throw err;
+					} 
 
-				User.findOneAndUpdate({ username: username }, { $push: { "rank_history": { rank_id: new ObjectID(rank._id), hike_id: new ObjectID(hike._id), hike_name : hike.name , overall_rating: rank.overall_rating} } }, function(err, data){
+					RankingPage.findByIdAndUpdate(rankingPageId, { $push: { "comments":  {rank_id: new ObjectID(rank._id), posted: rank.posted 
+						, author : rank.username , overall_rating : rank.overall_rating , short_description : rank.description.substring(0, 20)}}}, function(err, rankingPage){
+						if(err)
+							console.log(err);
+					});
+				});
+
+				User.findOneAndUpdate({ username: username }, { $push: { "rank_history": { rank_id: new ObjectID(rank._id), hike_id: new ObjectID(hike._id), 
+					hike_name : hike.name , overall_rating: rank.overall_rating} } }, function(err, data){
 					if(err)
 						console.log("error3 "+ err);
-					else
-						console.log("data "+ data);
 				});
 			}
 	    });
-
-
 	});
 
-
+	req.method = 'get'; 
     res.redirect('/hikes/' + hikeId);
 };
 
+function getRankingPageId(hike, callback) {
+	var rankingPageId;
+	if(hike.ranking_pages.lenth > 0) {
+		rankingPageId = hike.ranking_pages[hike.ranking_pages.length - 1];
+		RankingPage.findById(rankingPageId, function(err, rankingPage){
+			if (err) {
+				console.log(err);
+				throw err;
+			}
+
+			if( rankingPage.count >= 20 ) {
+				addRankingPageToHike(hike, rankingPage.page, callback);
+			}
+
+		});
+	} else {
+		addRankingPageToHike(hike, 0, callback);
+	}
+}
+
+function addRankingPageToHike(hike, page, callback) {
+	var newPage = new RankingPage();
+	newPage.hike_id = hike._id;
+	newPage.page = page +1;
+	newPage.count = 0;
+
+	newPage.save(function(err, rankingPage) {
+		if (err){
+			callback(err);
+		}
+
+		Hike.findByIdAndUpdate(hike._id, { $push: { "ranking_pages":  rankingPage._id }}, function(err, hike){
+			if (err) {
+				callback(err);
+			} else {
+				callback(null, newPage._id)
+			}
+		});
+	});
+}
 
 function saveNewRank(req, res, hikeName, hikeId, username, callback) {
 	var newRank 			= new Rank();
