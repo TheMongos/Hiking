@@ -48,11 +48,11 @@ exports.saveRank = function(req, res) {
 									throw err;
 								}
 
-								updateHikeAvg(hike);
+								updateHikeAvg(hike, rank);
 							});
 						});
 					} else {
-						updateHikeAvg(hike);
+						updateHikeAvg(hike, rank);
 					}
 				});
 
@@ -84,7 +84,7 @@ exports.saveRank = function(req, res) {
 };
 
 
-function updateHikeAvg(hike) {
+function updateHikeAvg(hike, rank) {
 	Hike.findById(hike._id, function(err, newHike) {
 		console.log("Middle: ");
 		console.log(newHike);
