@@ -26,7 +26,7 @@ exports.saveRank = function(req, res) {
 			if(rank) {
 				getRank(hikeId, username, function(oldRankId, message) {
 					if(oldRankId) { 
-						RankingPage.findByIdAndUpdate({},{ $pull: { comments: { rank_id: new ObjectID(oldRankId) } } }, { multi: false }, function(err){});
+						RankingPage.update({},{ $pull: { comments: { rank_id: new ObjectID(oldRankId) } } }, { multi: false }, function(err){});
 						User.update({ username: username }, { $pull: { rank_history: { rank_id: new ObjectID(oldRankId) } } }, { multi: false }, function(err){});
 						console.log(oldRankId);
 						Rank.findById(oldRankId, function(err, oldRank) { 
@@ -42,7 +42,7 @@ exports.saveRank = function(req, res) {
 								hikeAvgRating =hikeAvgRating / hikeRankCount;
 							}
 							console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
-							Hike.findByIdAndUpdate(hike._id ,{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false }, function(err){});
+							Hike.findByIdAndUpdate(hike._id ,{ $set: { avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount} }, { multi: false }, function(err){});
 						});
 					}
 				});

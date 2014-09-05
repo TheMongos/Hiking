@@ -2,3 +2,11 @@ db.users.update({username: "mohamed"},{$pull : {rank_history: {overall_rating: {
 
 
 
+
+db.ranks.remove({});
+
+db.rankingpages.remove({});
+
+db.users.update({username: "mohamed"},{$pull : {rank_history: {overall_rating: {$gt : 0}}}})
+
+xdb.hikes.update({_id:ObjectId("54020d5aa0c31b5b2d165078")},{$set : {ranking_pages: [], avg_overall_rating : 0 , rank_count : 0}})
