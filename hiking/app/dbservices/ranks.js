@@ -73,6 +73,7 @@ exports.saveRank = function(req, res) {
 								console.log(err);
 								throw err;
 							}
+							console.log("second");
 						});
 					});
 					
