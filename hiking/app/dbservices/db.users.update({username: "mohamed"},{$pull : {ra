@@ -1,0 +1,4 @@
+db.users.update({username: "mohamed"},{$pull : {rank_history: {overall_rating: {$gt : 1}}}})
+
+
+
