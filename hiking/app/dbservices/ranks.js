@@ -140,7 +140,7 @@ function getRank(hikeId, username, callback) {
     	var hikeObjectId = new ObjectID(hikeId);
     	console.log(hikeObjectId);
     	for(var i in rankArr) {
-    		if(rankArr[i].hike_id == new ObjectID(hikeObjectId)) {
+    		if(rankArr[i].hike_id == hikeId) {
     			callback(rankArr[i].rank_id, "You have already rank this hike, adding a new rank will delete your last rank");
     			console.log("here!!");
     			foundMatch = true;
