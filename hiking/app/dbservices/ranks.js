@@ -29,20 +29,21 @@ exports.saveRank = function(req, res) {
 						RankingPage.update({},{ $pull: { comments: { rank_id: new ObjectID(oldRankId) } } }, { multi: false });
 						User.update({ username: username }, { $pull: { rank_history: { rank_id: new ObjectID(oldRankId) } } }, { multi: false });
 						console.log(oldRankId);
-						//var oldRank = Rank.findById(oldRankId, function(err, oldRank) { console.log("Old: " + oldRank.overall_rating); });
-						var hikeRankCount = hike.rank_count;
-						var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
-						console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
-						hikeRankCount = hikeRankCount -1 ;
-						console.log("oldRank.overall_rating: " + oldRank.overall_rating + " " + typeof(oldRank.overall_rating));
-						hikeAvgRating -= oldRank.overall_rating;
-						console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
-						if(hikeRankCount != 0 ) {
-							hikeAvgRating =hikeAvgRating / hikeRankCount;
-						}
-						console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
-						Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
-
+						Rank.findById(oldRankId, function(err, oldRank) { 
+							console.log("Old: " + oldRank.overall_rating); 
+							var hikeRankCount = hike.rank_count;
+							var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
+							console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
+							hikeRankCount = hikeRankCount -1 ;
+							console.log("oldRank.overall_rating: " + oldRank.overall_rating + " " + typeof(oldRank.overall_rating));
+							hikeAvgRating -= oldRank.overall_rating;
+							console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
+							if(hikeRankCount != 0 ) {
+								hikeAvgRating =hikeAvgRating / hikeRankCount;
+							}
+							console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
+							Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
+						});
 					}
 				});
 
