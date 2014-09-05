@@ -26,8 +26,8 @@ exports.saveRank = function(req, res) {
 			if(rank) {
 				getRank(hikeId, username, function(oldRankId, message) {
 					if(oldRankId) { 
-						RankingPage.update({},{ $pull: { comments: { rank_id: new ObjectID(oldRankId) } } }, { multi: false });
-						User.update({ username: username }, { $pull: { rank_history: { rank_id: new ObjectID(oldRankId) } } }, { multi: false });
+						RankingPage.findByIdAndUpdate(oldRankId,{ $pull: { comments: { rank_id: new ObjectID(oldRankId) } } }, { multi: false }, function(err){});
+						User.update({ username: username }, { $pull: { rank_history: { rank_id: new ObjectID(oldRankId) } } }, { multi: false }, function(err){});
 						console.log(oldRankId);
 						Rank.findById(oldRankId, function(err, oldRank) { 
 							console.log("Old: " + oldRank.overall_rating); 
