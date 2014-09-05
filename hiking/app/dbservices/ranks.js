@@ -33,7 +33,10 @@ exports.saveRank = function(req, res) {
 						var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
 						hikeRankCount = hikeRankCount -1 ;
 						hikeAvgRating -= oldRank.overall_rating;
-						hikeAvgRating = hikeRankCount != 0 ? hikeAvgRating / hikeRankCount : hikeAvgRating;
+						console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
+						if(hikeRankCount != 0 ) {
+							hikeAvgRating =hikeAvgRating / hikeRankCount;
+						}
 						console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
 						Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
 
