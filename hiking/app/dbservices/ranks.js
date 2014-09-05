@@ -28,7 +28,7 @@ exports.saveRank = function(req, res) {
 					if(oldRankId) { 
 						RankingPage.update({},{ $pull: { comments: { rank_id: new ObjectID(oldRankId) } } }, { multi: false });
 						User.update({ username: username }, { $pull: { rank_history: { rank_id: new ObjectID(oldRankId) } } }, { multi: false });
-						var oldRank = Rank.findById(oldRankId, function(err, oldRank) { console.log("Old: " + oldRank.overall_rating; });
+						var oldRank = Rank.findById(oldRankId, function(err, oldRank) { console.log("Old: " + oldRank.overall_rating); });
 						var hikeRankCount = hike.rank_count;
 						
 						console.log("hike.avg_overall_rating: " + hike.avg_overall_rating + " " + typeof(hike.avg_overall_rating));
