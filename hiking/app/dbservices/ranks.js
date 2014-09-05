@@ -30,7 +30,9 @@ exports.saveRank = function(req, res) {
 						User.update({ username: username }, { $pull: { rank_history: { rank_id: new ObjectID(oldRankId) } } }, { multi: false });
 						var oldRank = Rank.findById(oldRankId);
 						var hikeRankCount = hike.rank_count;
+						console.log("type: " +hikeRankCount+" "+ typeof(hikeRankCount));
 						var hikeAvgRating = hike.avg_overall_rating * hikeRankCount;
+						console.log("type: " +hikeRankCount+" "+ typeof(hikeAvgRating));
 						hikeRankCount = hikeRankCount -1 ;
 						hikeAvgRating -= oldRank.overall_rating;
 						Hike.update({_id : hike._id},{avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount}, { multi: false });
