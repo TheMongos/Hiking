@@ -42,7 +42,7 @@ exports.saveRank = function(req, res) {
 								hikeAvgRating =hikeAvgRating / hikeRankCount;
 							}
 							console.log(hikeAvgRating + " " + typeof(hikeAvgRating));
-							Hike.findByIdAndUpdate(hike._id ,{ $set: { avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount} }, function(err){});
+							Hike.findByIdAndUpdate(hike._id ,{ $set: { avg_overall_rating : hikeAvgRating, rank_count : hikeRankCount} }, function(err, hike) {if(err) console.log(err);} );
 						});
 					}
 				});
