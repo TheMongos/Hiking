@@ -62,6 +62,8 @@ exports.saveRank = function(req, res) {
 
 
 					Hike.findById(hike._id, function(err, newHike) {
+						console.log("Middle: ");
+						console.log(newHike);
 						var hikeRankCount = newHike.rank_count;
 						var hikeAvgRating = newHike.avg_overall_rating * hikeRankCount;
 						hikeAvgRating += rank.overall_rating;
