@@ -15,66 +15,46 @@ var MongoStore		= require('connect-mongo')(session);
 
 var configDB 	= require('./config/database.js');
 
-var Tunnel = require('tunnel-ssh');
 
-var config = {
-    remotePort: 27017, //localport
-    localPort: 27017, //remoteport
-    verbose: true, // dump information to stdout
-    disabled: false, //set this to true to disable tunnel (useful to keep architecture for local connections)
-    sshConfig: { //ssh2 configuration (https://github.com/mscdex/ssh2)
-        host: 'webedu15.mtacloud.co.il',
-        port: 22,
-        username: 'webstud',
-        password: 'eladdavid123'
-        //publicKey: require('fs').readFileSync('/Users/davidtzoor/.ssh/id_rsa.pub')
-    }
-};
+// configuration
+mongoose.connect(configDB.url)
 
-var tunnel = new Tunnel(config);
-tunnel.connect(function (error) {
-	if (error) console.log(error);
+require('./config/passport')(passport);
 
-    // configuration
-	mongoose.connect(configDB.url)
+app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(bodyParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-	require('./config/passport')(passport);
+app.set('view engine', 'ejs');
 
-	app.use(morgan('dev'));
-	app.use(cookieParser());
-	app.use(bodyParser());
-	app.use(express.static(path.join(__dirname, 'public')));
+var year    = 365 * 24 * 3600000; //3600000 is an hour * 24 hours a day * 365 days a year
+app.use(session({
+    secret: 'eladanddavidarethebestever',
+    cookie: { maxAge: year },
+    store: new MongoStore({
+        mongoose_connection: mongoose.connection
+        
+    })
+}));
 
-	app.set('view engine', 'ejs');
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
-	var year    = 365 * 24 * 3600000; //3600000 is an hour * 24 hours a day * 365 days a year
-	app.use(session({
-	    secret: 'eladanddavidarethebestever',
-	    cookie: { maxAge: year },
-	    store: new MongoStore({
-	        mongoose_connection: mongoose.connection
-	        
-	    })
-	}));
-
-	app.use(passport.initialize());
-	app.use(passport.session());
-	app.use(flash());
-
-	app.use(function(req, res, next) {
-		if(req.url.substr(-1) == '/' && req.url.length > 1)
-			res.redirect(301, req.url.slice(0, -1));
-		else
-			next();
-	});
-
-	// routes
-	require('./app/routes.js')(app, passport)
-
-	// launch
-	app.listen(port);
-	console.log('To infinity and beyond at port ' + port);
+app.use(function(req, res, next) {
+	if(req.url.substr(-1) == '/' && req.url.length > 1)
+		res.redirect(301, req.url.slice(0, -1));
+	else
+		next();
 });
+
+// routes
+require('./app/routes.js')(app, passport)
+
+// launch
+app.listen(port);
+console.log('To infinity and beyond at port ' + port);
 
 
 
