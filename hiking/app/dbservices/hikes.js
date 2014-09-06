@@ -7,6 +7,8 @@ exports.findAll = function(req, res) {
                 hikesList : list,
                 message : ''
             });
+
+            console.log("Hello");
         }
     });
 };
@@ -66,8 +68,6 @@ exports.search = function(req, res) {
             hikesList : list,
             message : message
         });
-
-        console.log("Hello");
     });
 
 };
