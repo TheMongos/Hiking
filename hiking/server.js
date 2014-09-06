@@ -33,7 +33,7 @@ var config = {
 
 var tunnel = new Tunnel(config);
 tunnel.connect(function (error) {
-    console.log(error);
+	if (error) console.log(error);
 
     // configuration
 	mongoose.connect(configDB.url)

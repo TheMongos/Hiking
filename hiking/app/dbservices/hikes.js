@@ -6,7 +6,8 @@ exports.findAll = function(req, res) {
     getHikes(function(list) {
         if(list) {
             res.render('hikes.ejs', {
-                hikesList : list
+                hikesList : list,
+                message : ''
             });
         }
     });
@@ -17,7 +18,8 @@ exports.findById = function(req, res) {
     getHike(id, function(hike) {
         if(hike) {
             res.render('hike.ejs', {
-                hikesList : hike
+                hikesList : hike,
+                message : ''
             });
         } else {
             res.redirect('/hikes');
@@ -36,7 +38,8 @@ exports.getHikesNear = function(req, res) {
                 results.push(list.results[hike].obj);
             }
             res.render('hikes.ejs', {
-                hikesList : results
+                hikesList : results,
+                message : ''
             });
         } else {
             res.redirect('/hikes');
@@ -45,13 +48,53 @@ exports.getHikesNear = function(req, res) {
 
 };
 
-function getHike(id, callback) { 
-    Hike.findById(id, function(error, hike){
-        if (error) {
-            callback(false);
-        } else {
-            callback(hike);
+exports.search = function(req, res) {
+    var query = generateQuery(req);
+    Hike.find(query, function(err, list) {
+        if (err) {
+            console.log(err);
+            res.render('error.ejs', {
+                message : 'Internal error.'
+            });
         }
+        
+        var message = '';
+        if (list.length == 0)
+            message = 'לא נמצאו מסלולים מתאימים';
+        
+        res.render('hikes.ejs', {
+            hikesList : list,
+            message : message
+        });
+    });
+
+};
+
+function generateQuery(req) {
+    var area    = req.body['select-area'];
+    var minDiff = req.body['select-mindiff'];
+    var maxDiff = req.body['select-maxdiff']; 
+    var query;
+
+    if (area.length > 0) {
+        query = {
+            "area" : area,
+            "Difficulty" : {$gte : minDiff , $lte : maxDiff}
+        }
+
+    }   else {
+        query = {
+            "Difficulty" : {$gte : minDiff , $lte : maxDiff}
+        }
+    }
+    
+    return query;
+}
+
+function getHike(id, callback) { 
+    Hike.findById(id, function(err, hike){
+        if (err) return callback(err);
+        callback(hike);
     });
 }
 

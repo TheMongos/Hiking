@@ -2,7 +2,7 @@ var mongoose    = require('mongoose');
 
 var rankingPageSchema = mongoose.Schema({
 
-    hike_id: mongoose.Schema.Types.ObjectId,
+    hike_id: { type : mongoose.Schema.Types.ObjectId, index: true },
     page: Number, 
     count: Number,
     comments: [ {

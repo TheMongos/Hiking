@@ -10,12 +10,17 @@
 
 <section id="pageStudentList" data-role="page">
 	<header data-role="header" data-position="fixed">
-	<h1>Hike</h1>
+	<h1>Ranks</h1>
 	<a href="#pageSettings" data-transition="flip" 	data-role="button" 	data-icon="gear" data-iconpos="notext" class="ui-btn-right">Options</a>
 	</header>
 	<div class="content" data-role="content" id="maincontent">
-		<% if (hikesList != null) { %>
-			<%= hikesList %>
+		<!-- show any messages that come back with authentication -->
+		<% if (message.length > 0) { %>
+			<div class="alert alert-danger"><%= message %></div>
+		<% } %>
+		
+		<% if (rankPage != null) { %>
+			<%= rankPage %>
 		<% } %>
 		
 	</div

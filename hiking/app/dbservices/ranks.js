@@ -17,6 +17,7 @@ exports.addRank = function(req, res) {
 };
 
 exports.saveRank = function(req, res) {
+	console.log(req.params);
 	var hikeId = req.params.id;
 	var username = req.session.username;
 	Hike.findById(hikeId, function(err, hike){
@@ -73,6 +74,31 @@ exports.saveRank = function(req, res) {
 
 	req.method = 'get'; 
     res.redirect('/hikes/' + hikeId);
+};
+
+exports.getRankingPage = function(req, res) {
+	var hikeId 	= req.params.id;
+	var pageNum = req.params.number;
+
+	RankingPage.find( { hike_id : new ObjectID(hikeId) , page : pageNum }, function(err, rankingPage) {
+	    if (err) {
+            console.log(err);
+            res.render('error.ejs', {
+                message : 'Internal error.'
+            });
+        }
+        
+        var message = '';
+        if (rankingPage.length == 0)
+            message = 'לא קיים דף דירוג.';
+        
+        res.render('rankingPage.ejs', {
+            rankPage : rankingPage[0],
+            message : message
+        });
+	});
+
+
 };
 
 

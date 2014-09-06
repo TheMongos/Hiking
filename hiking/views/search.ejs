@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+	<title>Hiking app</title>
+	<link rel="stylesheet" href="/stylesheets/jquery.mobile-1.3.0.css" />
+	<script src="/js/jquery1.8.3.js"></script>
+	<script src="/js/jquery.mobile-1.3.0.min.js"></script>
+</head>
+<body>
+
+<section id="pageStudentList" data-role="page">
+	<header data-role="header" data-position="fixed">
+	<h1>Search</h1>
+	<a href="#pageSettings" data-transition="flip" 	data-role="button" 	data-icon="gear" data-iconpos="notext" class="ui-btn-right">Options</a>
+	</header>
+	<div class="content" data-role="content" id="maincontent">
+
+		<!-- show any messages that come back with authentication -->
+		<% if (message.length > 0) { %>
+			<div class="alert alert-danger"><%= message %></div>
+		<% } %>
+
+		<!-- LOGIN FORM -->
+		<form action="/search/hikes" method="post">
+			<div data-role='fieldcontain'>
+				<label for="select-area" class="select">בחר אזור</label>
+				<select name="select-area" id="select-area" data-native-menu="false">
+					<option value="צפון">צפון</option>
+					<option value="דרום">דרום</option>
+					<option value="מרכז">מרכז</option>
+				</select>
+			</div>
+			<div data-role='fieldcontain'>
+				<label for="select-mindiff" class="select">רמת קושי מינימלית</label>
+				<select name="select-mindiff" id="select-mindiff" data-native-menu="false" >
+					<option class="min-1" value="1">1</option>
+					<option class="min-2" value="2">2</option>
+					<option class="min-3" value="3">3</option>
+					<option class="min-4" value="4">4</option>
+					<option class="min-5" value="5">5</option>
+				</select>
+			</div>
+			<div data-role='fieldcontain'>
+				<label for="select-maxdiff" class="select">רמת קושי מקסימלית</label>
+				<select name="select-maxdiff" id="select-maxdiff" data-native-menu="false">
+					<option class="max-1" value="1">1</option>
+					<option class="max-2" value="2">2</option>
+					<option class="max-3" value="3">3</option>
+					<option class="max-4" value="4">4</option>
+					<option class="max-5" value="5" selected="true">5</option>
+				</select>
+			</div>
+			<div data-role='fieldcontain'>
+				<button type="submit" class="btn btn-warning btn-lg">Submit</button>
+			</div>
+		</form>
+	</div>
+	<footer data-role="footer" data-position="fixed"><h1><i>Trekking</i></h1></footer>
+</section>
+<script>
+
+	$('#select-mindiff').change(function() {
+		var selected = $(this).find('option:selected').val();
+
+		for(var i = 1 ; i < 5 ; i++) {
+			$(".max-" + i).removeAttr('disabled');
+		}
+
+		for(var i = 1 ; i < selected ; i++) {
+			$(".max-" + i).attr('disabled', 'disabled');
+		}
+
+		$('#select-maxdiff').selectmenu('refresh', true);
+	});
+
+	$('#select-maxdiff').change(function() {
+		var selected = $(this).find('option:selected').val();
+
+		for(var i = 1 ; i <= 5 ; i++) {
+			$(".min-" + i).removeAttr('disabled');
+		}
+
+		for(var i = 5 ; i > selected ; i--) {
+			$(".min-" + i).attr('disabled', 'disabled');
+		}
+
+		$('#select-mindiff').selectmenu('refresh', true);
+	});
+
+
+
+</script>
+</body>
+</html>

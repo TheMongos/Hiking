@@ -14,20 +14,25 @@
 	<a href="#pageSettings" data-transition="flip" 	data-role="button" 	data-icon="gear" data-iconpos="notext" class="ui-btn-right">Options</a>
 	</header>
 	<div class="content" data-role="content" id="maincontent">
+		<!-- show any messages that come back with authentication -->
+		<% if (message.length > 0) { %>
+			<div class="alert alert-danger"><%= message %></div>
+		<% } %>
+
 		<% if (hikesList != null) { %>
 			<ul data-role='listview' id='listDiv'>
-					
-						<% for (var i=0;i<hikesList.length;i++) { %>
-							<li><a href='/hikes/<%= hikesList[i]._id%>'><%= hikesList[i].name %></a></li>
-						<% } %>
+				<% for (var i=0;i<hikesList.length;i++) { %>
+					<li><a href='/hikes/<%= hikesList[i]._id%>'><%= hikesList[i].name %></a></li>
+				<% } %>
 			</ul>
 		<% } %>
 		
 	</div>
-	<form method='GET' onsubmit='addActionLocation(this)' >
+	<form method='get' onsubmit='addActionLocation(this)' >
 		<button type='sumbit' value='Find Near Me'></button>
 	</form>
-	<footer data-role="footer" data-position="fixed"><h1><i>Student Mobile</i></h1></footer>
+	<a id="findnear" rel='external' href="" >Find Near Me</a>
+	<footer data-role="footer" data-position="fixed"><h1><i>Trekking</i></h1></footer>
 </section>
 <script>
 	function addActionLocation(form) {
@@ -35,6 +40,10 @@
 		var lat = 33.020669;
 		form.action = "/hikes/findNearMe/" + lon + "/" + lat;
 	}
+
+var lon = 35.273970;
+		var lat = 33.020669;
+	$('#findnear').attr("href", "/hikes/findNearMe/" + lon + "/" + lat)
 </script>
 </body>
 </html>

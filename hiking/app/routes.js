@@ -43,9 +43,21 @@ module.exports = function(app, passport) {
 
 	app.post('/hikes/:id/addRank', isLoggedIn, ranks.saveRank);
 
+	app.get('/hikes/:id/rankingPage/:number', ranks.getRankingPage)
+
 	app.get('/hikes', hikes.findAll);
 
-	app.get('/hikes/findNearMe/:lon/:lat', isLoggedIn, hikes.getHikesNear); 
+	app.get('/hikes/findNearMe/:lon/:lat', isLoggedIn, hikes.getHikesNear);
+
+	app.get('/search/hikes', function(req, res) {
+		res.render('search', { message : '' });
+	}); 
+
+	app.post('/search/hikes', hikes.search);
+
+	app.get('/*', isLoggedIn, function(req, res) {
+		res.redirect('/profile');			
+	});
 };
 
 function isLoggedIn(req, res, next) {
@@ -53,5 +65,6 @@ function isLoggedIn(req, res, next) {
 		return next();
 
 	res.redirect('/login');
+	//res.send( { redirect : '/login' });
 }
 
