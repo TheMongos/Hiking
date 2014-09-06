@@ -1,5 +1,3 @@
-
-
 var Hike = require('../models/hike');
 
 exports.findAll = function(req, res) {
@@ -49,13 +47,15 @@ exports.getHikesNear = function(req, res) {
 };
 
 exports.search = function(req, res) {
-    var query = generateQuery(req);
+    var query = generateQuery(req); //Generate the dynamic query
     Hike.find(query, function(err, list) {
         if (err) {
             console.log(err);
             res.render('error.ejs', {
                 message : 'Internal error.'
             });
+
+            return;
         }
         
         var message = '';
@@ -66,6 +66,8 @@ exports.search = function(req, res) {
             hikesList : list,
             message : message
         });
+
+        console.log("Hello");
     });
 
 };
