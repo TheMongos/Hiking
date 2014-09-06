@@ -15,42 +15,66 @@ var MongoStore		= require('connect-mongo')(session);
 
 var configDB 	= require('./config/database.js');
 
-// configuration
-mongoose.connect(configDB.url)
+var Tunnel = require('tunnel-ssh');
 
-require('./config/passport')(passport);
+var config = {
+    remotePort: 27017, //localport
+    localPort: 27017, //remoteport
+    verbose: true, // dump information to stdout
+    disabled: false, //set this to true to disable tunnel (useful to keep architecture for local connections)
+    sshConfig: { //ssh2 configuration (https://github.com/mscdex/ssh2)
+        host: 'webedu15.mtacloud.co.il',
+        port: 22,
+        username: 'webstud',
+        password: 'eladdavid123'
+        //publicKey: require('fs').readFileSync('/Users/davidtzoor/.ssh/id_rsa.pub')
+    }
+};
 
-app.use(morgan('dev'));
-app.use(cookieParser());
-app.use(bodyParser());
-app.use(express.static(path.join(__dirname, 'public')));
+var tunnel = new Tunnel(config);
+tunnel.connect(function (error) {
+    console.log(error);
 
-app.set('view engine', 'ejs');
+    // configuration
+	mongoose.connect(configDB.url)
 
-var year    = 365 * 24 * 3600000; //3600000 is an hour * 24 hours a day * 365 days a year
-app.use(session({
-    secret: 'eladanddavidarethebestever',
-    cookie: { maxAge: year },
-    store: new MongoStore({
-        mongoose_connection: mongoose.connection
-        
-    })
-}));
+	require('./config/passport')(passport);
 
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(flash());
+	app.use(morgan('dev'));
+	app.use(cookieParser());
+	app.use(bodyParser());
+	app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req, res, next) {
-	if(req.url.substr(-1) == '/' && req.url.length > 1)
-		res.redirect(301, req.url.slice(0, -1));
-	else
-		next();
+	app.set('view engine', 'ejs');
+
+	var year    = 365 * 24 * 3600000; //3600000 is an hour * 24 hours a day * 365 days a year
+	app.use(session({
+	    secret: 'eladanddavidarethebestever',
+	    cookie: { maxAge: year },
+	    store: new MongoStore({
+	        mongoose_connection: mongoose.connection
+	        
+	    })
+	}));
+
+	app.use(passport.initialize());
+	app.use(passport.session());
+	app.use(flash());
+
+	app.use(function(req, res, next) {
+		if(req.url.substr(-1) == '/' && req.url.length > 1)
+			res.redirect(301, req.url.slice(0, -1));
+		else
+			next();
+	});
+
+	// routes
+	require('./app/routes.js')(app, passport)
+
+	// launch
+	app.listen(port);
+	console.log('To infinity and beyond at port ' + port);
 });
 
-// routes
-require('./app/routes.js')(app, passport)
 
-// launch
-app.listen(port);
-console.log('To infinity and beyond at port ' + port);
+
