@@ -113,7 +113,7 @@ function checkUserCompletedHike(hikeId, username, callback) {
                     if (err) 
                         return callback(err);
                     else
-                        return callback(null, q);
+                        return callback(null, user);
                 } );
 }
 
