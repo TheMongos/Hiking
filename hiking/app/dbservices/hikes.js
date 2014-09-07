@@ -8,7 +8,7 @@ exports.findAll = function(req, res) {
             res.render('hikes.ejs', {
                 hikesList : list,
                 message : ''
-            }); /                                                                                                                                           b
+            });                                                                                                                                           b
         }
     });
 };
