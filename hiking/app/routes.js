@@ -57,7 +57,7 @@ module.exports = function(app, passport) {
 	app.get('/hikes/findNearMe/:lon/:lat', isLoggedIn, hikes.getHikesNear);
 
 	//Increment completed counter for hike, by ID (using session, check if user already completed)
-	app.get('/hikes/:id/incCompleted', isLoggeedIn, hikes.incCompleted);
+	app.get('/hikes/:id/incCompleted', isLoggedIn, hikes.incCompleted);
 
 	//Get hikes search page
 	app.get('/search/hikes', function(req, res) {

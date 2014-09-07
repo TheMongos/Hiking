@@ -8,7 +8,7 @@ exports.findAll = function(req, res) {
             res.render('hikes.ejs', {
                 hikesList : list,
                 message : ''
-            });                                                                                                                                           b
+            });
         }
     });
 };
@@ -77,6 +77,8 @@ exports.incCompleted = function(req, res) {
 
     checkUserCompletedHike(hikeId, username, function(err, user) {
         if (err) {
+            console.log("First Error");
+            console.log(err);
             res.render('error.ejs', {
                 message : 'Internal error.'
             });
@@ -87,8 +89,10 @@ exports.incCompleted = function(req, res) {
             if(user) {
                 message = 'המשתמש השלים מסלול זה בעבר.';
             } else {
-                incCompleteCount.(hikeId, function(err) {
+                incCompleteCount(hikeId, function(err) {
                     if (err) {
+                        console.log("Second Error");
+                        console.log(err);
                         res.render('error.ejs', {
                             message : 'Internal error.'
                         });
@@ -107,7 +111,7 @@ exports.incCompleted = function(req, res) {
 };
 
 function checkUserCompletedHike(hikeId, username, callback) {
-    User.findOne( { username : username}
+    User.findOne( { username : username},
                   { hike_history : { $elemMatch : { hike_id : hikeId } } }, function(err, user) {
                     if (err) 
                         return callback(err);
@@ -119,7 +123,7 @@ function checkUserCompletedHike(hikeId, username, callback) {
 function incCompleteCount(hikeId, callback) {
     Hike.findByIdAndUpdate(hikeId, { $inc: { completed_count: 1 }}, function(err) {
         return callback(err);   
-    }
+    });
 }
 
 function generateQuery(req) {
