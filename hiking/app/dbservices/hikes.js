@@ -75,37 +75,27 @@ exports.incCompleted = function(req, res) {
     var hikeId = req.params.id;
     var username = req.session.username;
 
-    checkUserCompletedHike(hikeId, username, function(err, user) {
-        if (err) {
-            console.log("First Error");
-            console.log(err);
-            res.render('error.ejs', {
-                message : 'Internal error.'
-            });
-
-            return;
+    checkUserCompletedHike(hikeId, username, function(user) {
+        var message = '';
+        if(user) {
+            message = 'המשתמש השלים מסלול זה בעבר.';
         } else {
-            var message = '';
-            if(user) {
-                message = 'המשתמש השלים מסלול זה בעבר.';
-            } else {
-                incCompleteCount(hikeId, function(err) {
-                    if (err) {
-                        console.log("Second Error");
-                        console.log(err);
-                        res.render('error.ejs', {
-                            message : 'Internal error.'
-                        });
+            incCompleteCount(hikeId, function(err) {
+                if (err) {
+                    console.log("Second Error");
+                    console.log(err);
+                    res.render('error.ejs', {
+                        message : 'Internal error.'
+                    });
 
-                        return;
-                    } else {
-                        res.render('hikes.ejs', {
-                            hikesList : list,
-                            message : message
-                        }); 
-                    }
-                });
-            }
+                    return;
+                } else {
+                    res.render('hikes.ejs', {
+                        hikesList : list,
+                        message : message
+                    }); 
+                }
+            });
         }
     });
 };
