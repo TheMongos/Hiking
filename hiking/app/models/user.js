@@ -11,7 +11,7 @@ var userSchema = mongoose.Schema({
 	hike_history: [ {
 		hike_id: 	mongoose.Schema.Types.ObjectId, 
 		hike_name: 	String, 
-		date: 		Date, 
+		date: 		{ type: Date, default: Date.now }, 
 		hike_data: {
 			distance:	Number,
 			time:		Number	

@@ -15,7 +15,7 @@ exports.findAll = function(req, res) {
 
 exports.findById = function(req, res) {
     var id = req.params.id;
-    getHike(id, function(hike) {
+    getHike(id, function(err, hike) {
         if(hike) {
             res.render('hike.ejs', {
                 hike : hike
@@ -71,37 +71,21 @@ exports.search = function(req, res) {
 
 };
 
-exports.incCompleted = function(req, res) {
+exports.incCompleted = function(req) {
     var hikeId = req.params.id;
     var username = req.session.username;
 
     checkUserCompletedHike(hikeId, username, function(err, user) {
         if(err) {
             console.log(err);
-            res.render('error.ejs', {
-                message : 'Internal error.'
-            });
             return;
         }
-        var message = '';
-        if(user) {
-            message = 'המשתמש השלים מסלול זה בעבר.';
-        } else {
+        
+        if(user.hike_history.length == 0) {
             incCompleteCount(hikeId, function(err) {
                 if (err) {
-                    console.log("Second Error");
                     console.log(err);
-                    res.render('error.ejs', {
-                        message : 'Internal error.'
-                    });
-
                     return;
-                } else {
-                    res.redirect('/hikes/' + hikeId);
-                    // res.render('hikes.ejs', {
-                    //     hikesList : list,
-                    //     message : message
-                    // }); 
                 }
             });
         }
@@ -109,8 +93,8 @@ exports.incCompleted = function(req, res) {
 };
 
 function checkUserCompletedHike(hikeId, username, callback) {
-    User.findOne( { username : username, hike_history : { $elemMatch : { hike_id : hikeId } } }, function(err, user) {
-                    if (err) 
+    User.findOne( { username : username}, {hike_history : { $elemMatch : { hike_id : hikeId } } }, function(err, user) {
+                if (err) 
                         return callback(err);
                     else
                         return callback(null, user);
@@ -119,7 +103,7 @@ function checkUserCompletedHike(hikeId, username, callback) {
 
 function incCompleteCount(hikeId, callback) {
     Hike.findByIdAndUpdate(hikeId, { $inc: { completed_count: 1 }}, function(err) {
-        return callback(err);   
+        return callback(err);  
     });
 }
 
@@ -147,7 +131,7 @@ function generateQuery(req) {
 function getHike(id, callback) { 
     Hike.findById(id, function(err, hike){
         if (err) return callback(err);
-        callback(hike);
+        callback(null, hike);
     });
 }
 

@@ -1,5 +1,6 @@
 var hikes = require('../app/dbservices/hikes'); 
 var ranks = require('../app/dbservices/ranks'); 
+var users = require('../app/dbservices/users'); 
 
 module.exports = function(app, passport) {
 	
@@ -66,6 +67,14 @@ module.exports = function(app, passport) {
 
 	//Get hikes by difficulty and area (given by user in search)
 	app.post('/search/hikes', hikes.search);
+
+	//Get the start hike page where you log the time and distance of the hike
+	app.get('/hikes/:id/startHike', isLoggedIn, function(req, res) {
+		res.render('startHike', {});
+	});
+
+	//Post the user's hike details to the DB
+	app.post('/hikes/:id/logHike', isLoggedIn, users.logHike);
 
 	//Defalut routing for unknown page
 	app.get('/*', isLoggedIn, function(req, res) {
