@@ -90,10 +90,7 @@ exports.incCompleted = function(req, res) {
 
                     return;
                 } else {
-                    res.render('hikes.ejs', {
-                        hikesList : list,
-                        message : message
-                    }); 
+                    res.redirect('/hikes');
                 }
             });
         }
