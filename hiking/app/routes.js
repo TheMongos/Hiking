@@ -56,6 +56,9 @@ module.exports = function(app, passport) {
 	//Find hikes near location (lon, lat) in radius of 10km
 	app.get('/hikes/findNearMe/:lon/:lat', isLoggedIn, hikes.getHikesNear);
 
+	//Increment completed counter for hike, by ID (using session, check if user already completed)
+	app.get('/hikes/:id/incCompleted', isLoggeedIn, hikes.incCompleted);
+
 	//Get hikes search page
 	app.get('/search/hikes', function(req, res) {
 		res.render('search', { message : '' });

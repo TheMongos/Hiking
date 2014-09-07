@@ -1,4 +1,6 @@
 var Hike = require('../models/hike');
+var User = require('../models/user');
+var ObjectID = require('mongoose').Types.ObjectId;
 
 exports.findAll = function(req, res) {
     getHikes(function(list) {
@@ -6,9 +8,7 @@ exports.findAll = function(req, res) {
             res.render('hikes.ejs', {
                 hikesList : list,
                 message : ''
-            });
-
-            console.log("Hello");
+            }); /                                                                                                                                           b
         }
     });
 };
@@ -18,8 +18,7 @@ exports.findById = function(req, res) {
     getHike(id, function(hike) {
         if(hike) {
             res.render('hike.ejs', {
-                hikesList : hike,
-                message : ''
+                hike : hike
             });
         } else {
             res.redirect('/hikes');
@@ -71,6 +70,57 @@ exports.search = function(req, res) {
     });
 
 };
+
+exports.incCompleted = function(req, res) {
+    var hikeId = req.params.id;
+    var username = req.session.username;
+
+    checkUserCompletedHike(hikeId, username, function(err, user) {
+        if (err) {
+            res.render('error.ejs', {
+                message : 'Internal error.'
+            });
+
+            return;
+        } else {
+            var message = '';
+            if(user) {
+                message = 'המשתמש השלים מסלול זה בעבר.';
+            } else {
+                incCompleteCount.(hikeId, function(err) {
+                    if (err) {
+                        res.render('error.ejs', {
+                            message : 'Internal error.'
+                        });
+
+                        return;
+                    } else {
+                        res.render('hikes.ejs', {
+                            hikesList : list,
+                            message : message
+                        }); 
+                    }
+                });
+            }
+        }
+    });
+};
+
+function checkUserCompletedHike(hikeId, username, callback) {
+    User.findOne( { username : username}
+                  { hike_history : { $elemMatch : { hike_id : hikeId } } }, function(err, user) {
+                    if (err) 
+                        return callback(err);
+                    else
+                        return callback(user);
+                } );
+}
+
+function incCompleteCount(hikeId, callback) {
+    Hike.findByIdAndUpdate(hikeId, { $inc: { completed_count: 1 }}, function(err) {
+        return callback(err);   
+    }
+}
 
 function generateQuery(req) {
     var area    = req.body['select-area'];
