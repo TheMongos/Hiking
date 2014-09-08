@@ -16,7 +16,9 @@
 	</header>
 	<div class="content" data-role="content" id="maincontent">
 		<% if (hike != null) { %>
-			<%= hike %>
+			<%= pre %>
+				<%= JSON.stringify(hike, undefined, 2) %>
+			<%= /pre %>
 		<% } %>
 		
 	</div>
