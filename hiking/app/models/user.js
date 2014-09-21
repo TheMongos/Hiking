@@ -14,7 +14,7 @@ var userSchema = mongoose.Schema({
 		date: 		{ type: Date, default: Date.now }, 
 		hike_data: {
 			distance:	Number,
-			time:		Number	
+			time:		String	
 		}
 	} ],
 	rank_history: [ {

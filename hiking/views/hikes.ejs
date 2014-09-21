@@ -9,37 +9,60 @@
 </head>
 <body>
 
-<section id="pageStudentList" data-role="page">
-	<header data-role="header" data-position="fixed">
-	<h1>Hikes</h1>
-	<a href="#pageSettings" data-transition="flip" 	data-role="button" 	data-icon="gear" data-iconpos="notext" class="ui-btn-right">Options</a>
-	</header>
-	<div class="content" data-role="content" id="maincontent">
-		<!-- show any messages that come back with authentication -->
-		<% if (message.length > 0) { %>
+	<section id="pageStudentList" data-role="page">
+		<header data-role="header" data-position="fixed">
+			<h1>Hikes</h1>
+			<a href="#pageSettings" data-transition="flip" 	data-role="button" 	data-icon="gear" data-iconpos="notext" class="ui-btn-right">Options</a>
+		</header>
+		<div class="content" data-role="content" id="maincontent">
+			<!-- show any messages that come back with authentication -->
+			<% if (message.length > 0) { %>
 			<div class="alert alert-danger"><%= message %></div>
-		<% } %>
+			<% } %>
 
-		<% if (hikesList != null) { %>
+			<% if (hikesList != null) { %>
 			<ul data-role='listview' id='listDiv'>
 				<% for (var i=0;i<hikesList.length;i++) { %>
-					<li><a href='/hikes/<%= hikesList[i]._id%>'><%= hikesList[i].name %></a></li>
+				<li><a href='/hikes/<%= hikesList[i]._id%>'><%= hikesList[i].name %></a></li>
 				<% } %>
 			</ul>
-		<% } %>
-		
-	</div>
-	<form method='get' onsubmit='addActionLocation(this)' data-ajax="false">
-		<button type='sumbit' value='Find Near Me'></button>
-	</form>
-	<footer data-role="footer" data-position="fixed"><h1><i>Trekking</i></h1></footer>
-</section>
-<script>
-	function addActionLocation(form) {
-		var lon = 35.273970;
-		var lat = 33.020669;
-		form.action = "/hikes/findNearMe/" + lon + "/" + lat;
+			<% } %>
+
+		</div>
+		<form id="formToSend" method='get' data-ajax="false" style="display: none;">
+			<button type='sumbit' value='Find Near Me'></button>
+		</form>
+			<button onclick="addActionLocation()" type='sumbit' value='Find Near Me'></button>
+		<footer data-role="footer" data-position="fixed"><h1><i>Trekking</i></h1></footer>
+	</section>
+	<script>
+
+	var lon ;
+	var lat ;
+
+	function addActionLocation() {
+		if (navigator.geolocation) {
+			console.log("yes");
+			navigator.geolocation.getCurrentPosition(setLonLat);
+			console.log("lon: " +  lon  + "  lat: " + lat);
+			
+		} else {
+			console.log("no");
+			alert("cant use location services");
+			return false;
+		}
+
+		function setLonLat(position) {
+			lat = position.coords.latitude;
+			lon = position.coords.longitude;
+			console.log("lon: " +  lon  + "  lat: " + lat);
+			var action = "/hikes/findNearMe/" + lon + "/" + lat;
+			$("#formToSend").attr('action', action);
+
+			$("#formToSend button").click();		
+		}
 	}
+
 </script>
 </body>
 </html>
