@@ -51,6 +51,9 @@ module.exports = function(app, passport) {
 	//Get the ranks for a hike, by ID and ranking page number
 	app.get('/hikes/:id/rankingPage/:number', ranks.getRankingPage)
 
+	//Get the rank by ID
+	app.get('/ranks/:id', ranks.findById); 
+
 	//Get all hikes in DB
 	app.get('/hikes', hikes.findAll);
 

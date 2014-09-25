@@ -6,6 +6,19 @@ var RankingPage = require('../models/ranking_page');
 var ObjectID 	= require('mongoose').Types.ObjectId;
 var async 		= require('async');
 
+exports.findById = function(req, res) {
+    var id = req.params.id;
+    getRankById(id, function(err, rank) {
+        if(rank) {
+            res.render('rank.ejs', {
+                rank : rank
+            });
+        } else {
+            res.redirect('/profile');
+        }
+    });
+};
+
 exports.addRank = function(req, res) {
 	var hikeId = req.params.id;
 	var username = req.session.username;
@@ -101,6 +114,12 @@ exports.getRankingPage = function(req, res) {
 
 };
 
+function getRankById(id, callback) { 
+    Rank.findById(id, function(err, rank){
+        if (err) return callback(err);
+        callback(null, rank);
+    });
+}
 
 function updateHikeAvg(hike, rank) {
 	Hike.findById(hike._id, function(err, newHike) {
@@ -162,6 +181,9 @@ function addRankingPageToHike(hike, page, callback) {
 }
 
 function saveNewRank(req, res, hikeName, hikeId, username, callback) {
+	console.log("typeof req.body.difficulty");
+	console.log(req.body.difficulty);
+	console.log(typeof req.body.difficulty);
 	var newRank 			= new Rank();
 	newRank.username 		= username;
 	newRank.hike_id 		= hikeId;

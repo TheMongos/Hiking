@@ -1,47 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-	<title>Node Authentication</title>
+	<title>Hiking app</title>
+	<link rel="stylesheet" href="/stylesheets/rtl.jquery.mobile-1.3.0.min.css" />
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBUNLKigfLm1BMB_oVdEXgike-QMbYNBY"></script>
+	<script src="/js/jquery1.8.3.js"></script>
+	<script src="/js/rtl.jquery.mobile-1.3.0.min.js"></script>
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
 	<link rel="stylesheet" href="stylesheets/bootstrap.min.css"> 
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 	<style>
-		body 		{ padding-top:80px; }
+		.container {
+			margin-top: 20px;
+		} 
 	</style>
 </head>
 <body>
-<div class="container">
+	<section id="pageStudentList" data-role="page">
+		<header data-role="header" data-position="fixed">
+			<h1><span class="fa fa-sign-in" style="transform: scaleX(-1);"></span> הרשמה</h1>
+			<a href="#pageSettings" data-transition="flip" 	data-role="button" 	data-icon="gear" data-iconpos="notext" class="ui-btn-right">Options</a>
+		</header>
+		<div class="container">
 
-<div class="col-sm-6 col-sm-offset-3">
+			<div class="col-sm-6 col-sm-offset-3">
 
-	<h1><span class="fa fa-sign-in"></span> Signup</h1>
+				<!-- show any messages that come back with authentication -->
+				<% if (message.length > 0) { %>
+				<div class="alert alert-danger"><%= message %></div>
+				<% } %>
 
-	<!-- show any messages that come back with authentication -->
-	<% if (message.length > 0) { %>
-		<div class="alert alert-danger"><%= message %></div>
-	<% } %>
+				<!-- LOGIN FORM -->
+				<form action="/signup" method="post"  data-ajax="false">
+					<div class="form-group">
+						<label>שם משתמש</label>
+						<input type="text" class="form-control" name="username">
+					</div>
+					<div class="form-group">
+						<label>סיסמא</label>
+						<input type="password" class="form-control" name="password">
+					</div>
 
-	<!-- LOGIN FORM -->
-	<form action="/signup" method="post">
-		<div class="form-group">
-			<label>Username</label>
-			<input type="text" class="form-control" name="username">
+					<button type="submit" class="btn btn-warning btn-lg">הירשם</button>
+				</form>
+
+				<hr>
+
+				<p>יש לך כבר חשבון? <a href="/login">התחבר</a></p>
+
+			</div>
+
 		</div>
-		<div class="form-group">
-			<label>Password</label>
-			<input type="password" class="form-control" name="password">
-		</div>
-
-		<button type="submit" class="btn btn-warning btn-lg">Signup</button>
-	</form>
-
-	<hr>
-
-	<p>Already have an account? <a href="/login">Login</a></p>
-	<p>Or go <a href="/">home</a>.</p>
-
-</div>
-
-</div>
+		<footer data-role="footer" data-position="fixed"><h1><i>Trekking</i></h1></footer>
+	</section>
 </body>
 </html>
 

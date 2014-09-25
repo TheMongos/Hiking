@@ -2,12 +2,24 @@
 <html>
 <head>
 	<title>Hiking app</title>
-	<link rel="stylesheet" href="/stylesheets/jquery.mobile-1.3.0.css" />
+	<link rel="stylesheet" href="/stylesheets/rtl.jquery.mobile-1.3.0.min.css" />
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBUNLKigfLm1BMB_oVdEXgike-QMbYNBY"></script>
 	<script src="/js/jquery1.8.3.js"></script>
-	<script src="/js/jquery.mobile-1.3.0.min.js"></script>
+	<script src="/js/rtl.jquery.mobile-1.3.0.min.js"></script>
 	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
 
+	<style>
+	#maincontent #timer {
+    /*float: right;*/
+    text-align: center;
+    /*width: 49%;*/
+}	
+#maincontent #distance {
+/*    float: left;*/
+    text-align: center;
+    /*width: 49%;*/
+}
+	</style>
 </head>
 <body>
 
@@ -18,17 +30,17 @@
 		</header>
 		<div class="content" data-role="content" id="maincontent">
 
-			<button id="StartTracking" class="btn btn-warning btn-lg start">Start Tracking</button>
-			<button id="StopTracking" class="btn btn-warning btn-lg start">Stop Tracking</button>
-			<button id="SaveHike" class="btn btn-warning btn-lg start">Save Hike</button>
+			<button id="StartTracking" class="btn btn-warning btn-lg start">התחל מסלול</button>
+			<button id="StopTracking" class="btn btn-warning btn-lg start">סיים</button>
+			<button id="SaveHike" class="btn btn-warning btn-lg start">שמור מסלול</button>
 			
 
-			<div id="timer"><span id="sw_h">00</span>:<span id="sw_m">00</span>:<span id="sw_s">00</span></div>
-		    <div><span id="sw_distance">0</span></div>
+			<div id="timer"><h3>זמן: <span id="sw_h">00</span>:<span id="sw_m">00</span>:<span id="sw_s">00</span></h3></div>
+		    <div id="distance"><h3>מרחק: <span id="sw_distance">0</span> ק״מ</h3></div>
 
 			<div id="map-canvas" style="width:100%;height:300px;"></div>
 
-			<form id="summaryForm" onsubmit="setAction(this)" method="post" data-ajax="false" >
+			<form id="summaryForm" onsubmit="setAction(this)" method="post" data-ajax="false" style="display: none;" >
 				<div class="form-group">
 					<label>Time</label>
 					<input id="timeInput" class="form-control" name="time">

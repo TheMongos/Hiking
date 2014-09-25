@@ -1,37 +1,80 @@
 <!doctype html>
 <html>
 <head>
-	<title>Node Authentication</title>
+	<title>Hiking app</title>
+	<link rel="stylesheet" href="/stylesheets/rtl.jquery.mobile-1.3.0.min.css" />
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBUNLKigfLm1BMB_oVdEXgike-QMbYNBY"></script>
+	<script src="/js/jquery1.8.3.js"></script>
+	<script src="/js/rtl.jquery.mobile-1.3.0.min.js"></script>
+	<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
 	<link rel="stylesheet" href="stylesheets/bootstrap.min.css"> 
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 	<style>
-		body 		{ padding-top:80px; word-wrap:break-word; }
+	.well {
+		border: none;
+	}
+	.well > h3 {
+		text-align: center;
+	}
 	</style>
 </head>
 <body>
-<div class="container">
+	<section id="pageStudentList" data-role="page">
+		<header data-role="header" data-position="fixed">
+			<h1><span class="fa fa-anchor"></span> פרופיל משתמש</h1>
+			<a href="#pageSettings" data-transition="flip" 	data-role="button" 	data-icon="gear" data-iconpos="notext" class="ui-btn-right">Options</a>
+		</header>
+		<div class="container">
 
-	<div class="page-header text-center">
-		<h1><span class="fa fa-anchor"></span> Profile Page</h1>
-		<a href="/logout" class="btn btn-default btn-sm">Logout</a>
-	</div>
 
-	<div class="row">
 
-		<!-- LOCAL INFORMATION -->
-		<div class="col-sm-6">
-			<div class="well">
-				<h3><span class="fa fa-user"></span> Local</h3>
+			<div class="row">
 
-					<pre>
-						<%= JSON.stringify(user, undefined, 2) %>
-					</pre>
+				<!-- LOCAL INFORMATION -->
+				<div class="col-sm-6">
+					<div class="well">
+						<h3><span class="fa fa-user"></span> <%=  user.username %> </h3>
 
-			</div>
-		</div>
 
-	</div>
+						<div data-role="collapsible-set">
 
-</div>
-</body>
-</html>
+							<div data-role="collapsible" >
+								<h3>היסטוריית מסלולים</h3>
+								<% for(var i=0; i<user.hike_history.length; i++) {%>
+								<div>
+									<a href=<%= '/hikes/'+ user.hike_history[i].hike_id%>><%= user.hike_history[i].hike_name %></a>
+									<ul>
+										<li>זמן: <%= user.hike_history[i].hike_data.time %></li>
+										<li>מרחק: <%= user.hike_history[i].hike_data.distance %></li></ul>
+									</div>
+									<% } %>
+								</div>
+
+								<div data-role="collapsible">
+									<h3>היסטוריית דירוגים</h3>
+									<% for(var i=0; i<user.rank_history.length; i++) {%>
+									<div>
+										<%=user.rank_history[i].hike_name%>
+										<ul>
+											<li>דירוג כללי: <%= user.rank_history[i].overall_rating %></li>
+											<li><a href=<%= '/ranks/'+ user.rank_history[i].rank_id%>>לדירוג המלא</a></li>
+											<li><a href=<%= '/hikes/'+ user.rank_history[i].hike_id%>>לצפייה במסלול</a></li></ul>
+										</div>
+										<% } %>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+
+						<div class="page-header text-center">
+							<a href="/logout" class="btn btn-default btn-sm">התנתק</a>
+						</div>
+					</div>
+
+				</div>
+				<footer data-role="footer" data-position="fixed"><h1><i>Trekking</i></h1></footer>
+			</section>
+		</body>
+		</html>
