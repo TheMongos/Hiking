@@ -19,7 +19,7 @@
 	<section id="pageStudentList" data-role="page">
 		<header data-role="header" data-position="fixed">
 			<h1><span class="fa fa-sign-in" style="transform: scaleX(-1);"></span> הרשמה</h1>
-			<a href="#pageSettings" data-transition="flip" 	data-role="button" 	data-icon="gear" data-iconpos="notext" class="ui-btn-right">Options</a>
+			
 		</header>
 		<div class="container">
 
@@ -51,7 +51,16 @@
 			</div>
 
 		</div>
-		<footer data-role="footer" data-position="fixed"><h1><i>Trekking</i></h1></footer>
+		<footer data-role="footer" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a rel="external" href="/home" ><span class="fa fa-home fa-2x"></span></a></li>
+					<li><a rel="external" href="/profile" ><span class="fa fa-user fa-2x"></span></a></li>
+					<li><a rel="external" href="/hikes" ><span class="fa fa-road fa-2x"></span></a></li>
+				</ul>
+			</div>
+			<h1><i>Trekking</i></h1>
+		</footer>
 	</section>
 </body>
 </html>

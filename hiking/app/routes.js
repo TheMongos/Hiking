@@ -39,6 +39,11 @@ module.exports = function(app, passport) {
 		res.redirect('/');
 	});
 
+	//Get the home page
+	app.get('/home', function(req, res) {
+		res.render('index.ejs');
+	});
+
 	//Get the hike page by ID
 	app.get('/hikes/:id', hikes.findById); 
 
@@ -52,7 +57,7 @@ module.exports = function(app, passport) {
 	app.get('/hikes/:id/rankingPage/:number', ranks.getRankingPage)
 
 	//Get the rank by ID
-	app.get('/ranks/:id', ranks.findById); 
+	app.get('/ranks/:id', ranks	.findById); 
 
 	//Get all hikes in DB
 	app.get('/hikes', hikes.findAll);

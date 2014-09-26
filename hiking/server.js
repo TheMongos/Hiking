@@ -15,26 +15,6 @@ var MongoStore		= require('connect-mongo')(session);
 
 var configDB 	= require('./config/database.js');
 
-var Tunnel = require('tunnel-ssh');
-
-var config = {
-    remotePort: 27017, //localport
-    localPort: 27017, //remoteport
-    verbose: true, // dump information to stdout
-    disabled: false, //set this to true to disable tunnel (useful to keep architecture for local connections)
-    sshConfig: { //ssh2 configuration (https://github.com/mscdex/ssh2)
-        host: 'webedu15.mtacloud.co.il',
-        port: 22,
-        username: 'webstud',
-        password: 'eladdavid123'
-        //publicKey: require('fs').readFileSync('/Users/davidtzoor/.ssh/id_rsa.pub')
-    }
-};
-
-var tunnel = new Tunnel(config);
-tunnel.connect(function (error) {
-if (error) console.log(error);
-
     // configuration
 mongoose.connect(configDB.url)
 
@@ -74,4 +54,3 @@ require('./app/routes.js')(app, passport)
 // launch
 app.listen(port);
 console.log('To infinity and beyond at port ' + port);
-});

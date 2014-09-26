@@ -17,6 +17,7 @@ exports.findById = function(req, res) {
     var id = req.params.id;
     getHike(id, function(err, hike) {
         if(hike) {
+            
             res.render('hike.ejs', {
                 hike : hike
             });
